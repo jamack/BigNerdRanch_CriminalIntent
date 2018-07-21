@@ -1,13 +1,10 @@
 package com.bignerdranch.android.criminalintent;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +15,9 @@ import android.widget.EditText;
 
 import java.util.UUID;
 
-// TODO: implement saved state for configuration changes
 public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
-
-    // For Challenge
-    public static final String EXTRA_CRIME_ID = "crime_id";
-    private UUID mCrimeId;
-    private boolean mEdited;
 
     private Crime mCrime;
     private EditText mTitleField;
@@ -46,12 +37,8 @@ public class CrimeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // For Challenge
-        mCrimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
-        mCrime = CrimeLab.get(getActivity()).getCrime(mCrimeId);
-        mEdited = false;
-//        UUID crimeID = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
-//        mCrime = CrimeLab.get(getActivity()).getCrime(crimeID);
+        UUID crimeID = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeID);
     }
 
     @Nullable
@@ -70,11 +57,6 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 mCrime.setTitle(charSequence.toString());
-
-                // For Challenge
-                if (mEdited != true) {
-                    crimeEdited();
-                }
             }
 
             @Override
@@ -93,26 +75,10 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
-
-                // For Challenge
-                if (mEdited != true) {
-                    crimeEdited();
-                }
             }
         });
 
         return v;
-    }
-
-
-    // TODO: This is called EVERY TIME there's any interaction with the EditText. Fix so only called once at end.
-    // For Challenge
-    private void crimeEdited() {
-        Log.d("CrimeFragment", "Entering crimeEdited method");
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_CRIME_ID, mCrimeId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        mEdited = true;
     }
 
 }

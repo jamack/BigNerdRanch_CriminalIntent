@@ -10,8 +10,6 @@ public class CrimeActivity extends SingleFragmentActivity {
 
     public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
-    private UUID crimeID;
-
     public static Intent newIntent(Context packageContext, UUID crimeID) {
         Intent intent = new Intent(packageContext, CrimeActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeID);
@@ -22,16 +20,7 @@ public class CrimeActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
 //        return new CrimeFragment();
 
-        // For Challenge
-        crimeID = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
-//        UUID crimeID = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        UUID crimeID = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
         return CrimeFragment.newInstance(crimeID);
-    }
-
-    // For Challenge
-    @Override
-    public void onBackPressed() {
-
-        super.onBackPressed();
     }
 }
