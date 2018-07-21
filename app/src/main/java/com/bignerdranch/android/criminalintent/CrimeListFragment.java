@@ -92,14 +92,6 @@ public class CrimeListFragment extends Fragment {
                 Log.d("CrimeListFragment","In onActivityResult method; request code not handled by switch statement");
         }
 
-//        if(requestCode == REQUEST_CODE_EDIT) {
-//            if (resultCode == Activity.RESULT_OK && mSelectedCrime != null) {
-//
-//                UUID editedCrime = data.getE
-//
-//                updateItem();
-//            }
-//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
