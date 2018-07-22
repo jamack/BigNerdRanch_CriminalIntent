@@ -1,8 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.view.ViewPager
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/crime_view_pager"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.v4.view.ViewPager>
+    <android.support.v4.view.ViewPager
+
+        android:id="@+id/crime_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/barrier_top_of_buttons" />
+
+    <Button
+        android:id="@+id/jump_to_first"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:text="First crime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/jump_to_last"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/crime_view_pager"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/jump_to_last"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:text="Last crime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/jump_to_first" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_top_of_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="jump_to_first,jump_to_last"
+        tools:layout_editor_absoluteY="511dp" />
+
+</android.support.constraint.ConstraintLayout>
