@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment {
+// PUSHING VCS: end of Chapter 12 - Dialogs
 
     public static final String EXTRA_DATE =
             "com.bignerdranch.android.criminalintent.date";
