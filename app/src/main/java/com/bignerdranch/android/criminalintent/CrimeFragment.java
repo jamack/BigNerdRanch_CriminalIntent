@@ -15,21 +15,27 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import static android.widget.CompoundButton.*;
+import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
 
+    // For Challenge
+    private static final String DIALOG_TIME = "DialogTime";
+    private static final int REQUEST_TIME = 10;
+
     private static final int REQUEST_DATE = 0;
 
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckbox;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -53,7 +59,7 @@ public class CrimeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
 
-        mTitleField = (EditText) v.findViewById(R.id.crime_title);
+        mTitleField = v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -95,6 +101,20 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        // For Challenge
+        mTimeButton = v.findViewById(R.id.crime_time);
+        updateTime();
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+//                TimePickerFragment timePicker = new TimePickerFragment();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                dialog.show(manager, DIALOG_TIME);
+            }
+        });
+
         return v;
     }
 
@@ -114,5 +134,13 @@ public class CrimeFragment extends Fragment {
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    // For Challenge
+    // TODO: KINDA WORKS ... BUUT NOT FORMATTING TIME AS EXPECTED. LOOK INTO NEW JAVA 8 DATE-TIME API (https://docs.oracle.com/javase/tutorial/datetime/TOC.html)
+    private void updateTime() {
+        Date date = mCrime.getDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm a z");
+        mTimeButton.setText(formatter.format(date));
     }
 }
