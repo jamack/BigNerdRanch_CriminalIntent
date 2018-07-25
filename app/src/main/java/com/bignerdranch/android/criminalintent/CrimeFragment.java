@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,27 +121,45 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("CrimeFragment","entering onActivityResult method");
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
 
-        if (requestCode == REQUEST_DATE) {
-            Date date = (Date) data
-                    .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mCrime.setDate(date);
-            updateDate();
+        switch (requestCode) {
+            case REQUEST_DATE:
+                Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                mCrime.setDate(date);
+                updateDate();
+                break;
+            case REQUEST_TIME:
+                Date dateWithTime = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+                mCrime.setDate(dateWithTime);
+                updateTime();
+                break;
+            default:
+                Log.d("CrimeFragment","In onActivityResult method; did NOT match a request code");
         }
+
+//        if (requestCode == REQUEST_DATE) {
+//            Date date = (Date) data
+//                    .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+//            mCrime.setDate(date);
+//            updateDate();
+//        }
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getDate().toString());
+        Date date = mCrime.getDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("E MMMM dd, yyyy");
+        mDateButton.setText(formatter.format(date));
     }
 
     // For Challenge
     // TODO: KINDA WORKS ... BUUT NOT FORMATTING TIME AS EXPECTED. LOOK INTO NEW JAVA 8 DATE-TIME API (https://docs.oracle.com/javase/tutorial/datetime/TOC.html)
     private void updateTime() {
         Date date = mCrime.getDate();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm a z");
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a z");
         mTimeButton.setText(formatter.format(date));
     }
 }

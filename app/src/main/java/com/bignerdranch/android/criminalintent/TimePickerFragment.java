@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -19,9 +20,11 @@ import java.util.Date;
 public class TimePickerFragment extends DialogFragment {
 
     private static final String ARG_TIME = "time";
-    private static final String EXTRA_TIME = "com.bignerdranch.android.com.criminalintent.time";
+
+    public static final String EXTRA_TIME = "com.bignerdranch.android.com.criminalintent.time";
 
     TimePicker mTimePicker;
+    Calendar mCalendar;
 
     public static TimePickerFragment newInstance(Date date) {
 
@@ -37,12 +40,12 @@ public class TimePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-    Date date = (Date) getArguments().getSerializable(ARG_TIME);
+        Date date = (Date) getArguments().getSerializable(ARG_TIME);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        final int minute = calendar.get(Calendar.MINUTE);
+        mCalendar = Calendar.getInstance();
+        mCalendar.setTime(date);
+        int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
+        int minute = mCalendar.get(Calendar.MINUTE);
 
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_time, null);
 
@@ -72,18 +75,19 @@ public class TimePickerFragment extends DialogFragment {
                             minute = mTimePicker.getCurrentMinute();
                         }
 
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.set(Calendar.HOUR_OF_DAY,hour);
-//                        calendar.set(Calendar.MINUTE,minute);
-//                        Date date = calendar.getTime();
-//
-//                        sendResult(date);
+                        if (mCalendar != null) {
+                            mCalendar.set(Calendar.HOUR_OF_DAY, hour);
+                            mCalendar.set(Calendar.MINUTE, minute);
+                            Date date = mCalendar.getTime();
+
+                            sendResult(Activity.RESULT_OK, date);
+                        }
                     }
                 })
                 .create();
     }
 
-    private void sendResult(Date date) {
+    private void sendResult(int resultCode, Date date) {
         if (getTargetFragment() == null) {
             return;
         }
@@ -91,5 +95,6 @@ public class TimePickerFragment extends DialogFragment {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TIME, date);
 
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

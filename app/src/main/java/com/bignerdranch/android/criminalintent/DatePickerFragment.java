@@ -13,7 +13,6 @@ import android.widget.DatePicker;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment {
 
@@ -23,6 +22,9 @@ public class DatePickerFragment extends DialogFragment {
     private static final String ARG_DATE = "date";
 
     private DatePicker mDatePicker;
+
+    // For Challenge
+    Calendar mCalendar;
 
     public static DatePickerFragment newInstance(Date date) {
         Bundle args = new Bundle();
@@ -37,11 +39,17 @@ public class DatePickerFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Date date = (Date) getArguments().getSerializable(ARG_DATE);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        // For Challenge
+        mCalendar = Calendar.getInstance();
+        mCalendar.setTime(date);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(date);
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_date, null);
@@ -59,7 +67,13 @@ public class DatePickerFragment extends DialogFragment {
                                 int year = mDatePicker.getYear();
                                 int month = mDatePicker.getMonth();
                                 int day = mDatePicker.getDayOfMonth();
-                                Date date = new GregorianCalendar(year, month, day).getTime();
+
+                                // For Challenge
+                                mCalendar.set(Calendar.YEAR,year);
+                                mCalendar.set(Calendar.MONTH,month);
+                                mCalendar.set(Calendar.DAY_OF_MONTH,day);
+                                Date date = mCalendar.getTime();
+//                                Date date = new GregorianCalendar(year, month, day).getTime();
                                 sendResult(Activity.RESULT_OK, date);
                             }
                         })
