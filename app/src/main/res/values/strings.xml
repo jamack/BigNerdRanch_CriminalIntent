@@ -10,4 +10,5 @@
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$d crimes</string>
+    <string name="empty_view_text">No suspicious activity at this time.\n\nBe sure to report any new incidents.</string>
 </resources>

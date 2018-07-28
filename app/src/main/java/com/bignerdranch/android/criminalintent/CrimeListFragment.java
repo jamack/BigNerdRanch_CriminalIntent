@@ -3,6 +3,7 @@ package com.bignerdranch.android.criminalintent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.Group;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +27,12 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+
+    // For Challenge
+    private int mCrimeCount;
+    private TextView mEmptyViewTextView;
+    private Button mEmptyViewButton;
+    private Group mEmptyViewGroup;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +51,17 @@ public class CrimeListFragment extends Fragment {
 
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // For Challenge
+        mEmptyViewGroup = view.findViewById(R.id.empty_view);
+        mEmptyViewTextView = view.findViewById(R.id.empty_view_text);
+        mEmptyViewButton = view.findViewById(R.id.empty_view_button);
+        mEmptyViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCrime();
+            }
+        });
 
         updateUI();
 
@@ -67,10 +86,7 @@ public class CrimeListFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.new_crime:
-                Crime crime = new Crime();
-                CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
-                startActivity(intent);
+                addCrime();
                 return true;
             case R.id.show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
@@ -82,10 +98,19 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
+    private void addCrime() {
+        Crime crime = new Crime();
+        CrimeLab.get(getActivity()).addCrime(crime);
+        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
+        startActivity(intent);
+    }
+
     private void updateSubtitle() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        int crimeCount = crimeLab.getCrimes().size();
-        String subtitle = getString(R.string.subtitle_format, crimeCount);
+        // For Challenge. Code moved to updateUI.
+//        CrimeLab crimeLab = CrimeLab.get(getActivity());
+//        int crimeCount = crimeLab.getCrimes().size();
+        String subtitle = getString(R.string.subtitle_format, mCrimeCount);
+//        String subtitle = getString(R.string.subtitle_format, crimeCount);
 
         if (!mSubtitleVisible) {
             subtitle = null;
@@ -105,6 +130,9 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
+        // For Challenge
+        mCrimeCount = crimes.size();
+
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
@@ -113,6 +141,15 @@ public class CrimeListFragment extends Fragment {
         }
 
         updateSubtitle();
+        updateEmptyView();
+    }
+
+    private void updateEmptyView() {
+        if (mCrimeCount == 0) {
+            mEmptyViewGroup.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyViewGroup.setVisibility(View.GONE);
+        }
     }
 
     @Override
