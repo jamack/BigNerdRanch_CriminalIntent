@@ -46,4 +46,18 @@ public class CrimeLab {
 
         return null;
     }
+
+    public int deleteCrime(UUID id) {
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getID().equals(id)) {
+                mCrimes.remove(i);
+
+                // Return 1. Successful operation
+                return 1;
+            }
+        }
+
+        // Return 0 if no UUID matched. Unsuccessful operation.
+        return 0;
+    }
 }
