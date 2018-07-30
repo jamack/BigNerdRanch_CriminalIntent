@@ -5,14 +5,17 @@ import java.util.UUID;
 
 public class Crime {
 
-    private UUID mID;
+    private UUID mId;
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
-    private boolean mRequiresPolice;
 
     public Crime() {
-        mID = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Crime(UUID id) {
+        mId = id;
         mDate = new Date();
     }
 
@@ -42,6 +45,6 @@ public class Crime {
 
     public UUID getID() {
 
-        return mID;
+        return mId;
     }
 }
